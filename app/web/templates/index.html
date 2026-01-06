@@ -14,7 +14,7 @@
 <div class="container text-center">
     <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">BeagleWatch</a>
+            <a class="navbar-brand logo-text" href="#"><img class="sidebar-image" src="{{ url_for('static', filename='images/beagle-logo.jpeg') }}"/> BeagleWatch</a>
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarTabs" aria-controls="navbarTabs" aria-expanded="false"
@@ -30,20 +30,6 @@
                                 data-bs-target="#news" type="button" role="tab" aria-controls="news"
                                 aria-selected="true">
                             News
-                        </button>
-                    </li>
-                    <li class="nav-item">
-                        <button class="nav-link" id="CVE-tab" data-bs-toggle="tab"
-                                data-bs-target="#CVE" type="button" role="tab" aria-controls="CVE"
-                                aria-selected="false">
-                            CVE
-                        </button>
-                    </li>
-                    <li class="nav-item">
-                        <button class="nav-link" id="cvesearch-tab" data-bs-toggle="tab"
-                                data-bs-target="#cvesearch" type="button" role="tab" aria-controls="cvesearch"
-                                aria-selected="false">
-                            CVE Search
                         </button>
                     </li>
                 </ul>
@@ -76,12 +62,7 @@
                 {% endif %}
             </nav>
         </div>
-        <div class="tab-pane fade" id="CVE" data-bs-toggle="tab" role="tabpanel" aria-labelledby="CVE-tab">
-            Profile content...
-        </div>
-        <div class="tab-pane fade" id="cvesearch" data-bs-toggle="tab" role="tabpanel" aria-labelledby="cvesearch-tab">
-            Messages content...
-        </div>
+
     </div>
 
 
