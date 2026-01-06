@@ -347,5 +347,58 @@ color: #d2c094;
     box-sizing: border-box;
 }
 
+ul.doc-list > li { float: left; /* or right */ }
+ul.doc-list::after { content:""; display:block; clear:both; }
+/*
+experimental neon frame effect for content containers
+*/
+.neo-frame{
+  position:relative;
+  max-width:300px;
+  margin:24px auto;
+  padding:10px;
+  border-radius:5px;
+  background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  overflow:hidden;
+  box-shadow: 0 6px 30px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.02);
+}
+
+/* glowing multi-line border using pseudo-elements */
+.neo-frame::before,
+.neo-frame::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:inherit;
+  pointer-events:none;
+}
+
+/* primary neon stroke (soft glow) */
+.neo-frame::before{
+  margin:6px; /* inner gap for dual-line look */
+  padding:2px; /* thickness of the glowing line */
+  box-shadow:
+    0 0 18px rgba(128,0,255,0.28),
+    0 0 38px rgba(0,200,255,0.22),
+    0 6px 30px rgba(0,0,0,0.6) inset;
+  filter: blur(6px);
+}
+
+/* sharp inner neon edge (contrasting color) */
+.neo-frame{
+  margin:10px;
+  border:2px solid #de9a32;
+  mix-blend-mode: screen;
+}
+
+@keyframes sweep{
+  0%{ transform:translateX(-100%) rotate(0); opacity:0.0; }
+  20%{ opacity:0.25; }
+  50%{ transform:translateX(0%) rotate(0); opacity:0.5; }
+  80%{ opacity:0.25; }
+  100%{ transform:translateX(100%) rotate(0); opacity:0; }
+}
+
+
 
 

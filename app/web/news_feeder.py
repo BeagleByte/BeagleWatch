@@ -1,3 +1,4 @@
+import logging
 import os
 import pathlib
 import threading
@@ -17,59 +18,72 @@ app.secret_key = "change-me-to-a-secure-key"  # replace in production
 
 ALLOWED_EXT = {".md", ".markdown"}
 
-def list_markdown_files():
+def count_markdown_files():
+    return sum(1 for p in CONTENT_DIR.glob("**/*") if p.is_file() and p.suffix.lower() in ALLOWED_EXT)
+
+def list_markdown_files(offset=0, limit=None):
     files = []
     files_in_content = [p for p in CONTENT_DIR.glob("**/*") if p.is_file()]
     files_sorted = sorted(files_in_content, key=lambda p: p.stat().st_mtime, reverse=True)
+    if limit is not None:
+        files_sorted = files_sorted[offset: offset + limit]
+    # rest unchanged: build files list from files_sorted ...
     for p in files_sorted:
-        if p.is_file() and p.suffix.lower() in ALLOWED_EXT:
+        if p.suffix.lower() in ALLOWED_EXT:
             try:
                 post = frontmatter.load(p)
-            except Exception as e:
+            except Exception:
                 post = None
-            title = None
-            metadata = {}
-            if post:
-                metadata = post.metadata or {}
-                # reasonable default title: YAML title or filename (without ext)
-                title = metadata.get("title") or p.stem
-            else:
+            metadata = post.metadata if post else {}
+            title = metadata.get("title") if post else p.stem
+            if not title:
                 title = p.stem
-            # find first image referenced in markdown or metadata.image
             image = metadata.get("image")
             if not image and post:
-                # simple heuristic: scan content for ![alt](path)
                 import re
-                m = re.search(r'!\[[^]]*]\(([^)]+)\)', post.content)
+                m = re.search(r'![[^]]*](([^)]+))', post.content)
                 if m:
                     image = m.group(1)
-            # sanitize image path: if relative and exists in content dir, build URL
             image_url = None
             if image:
                 img_path = (p.parent / image).resolve() if not os.path.isabs(image) else pathlib.Path(image)
                 try:
-                    # ensure the image is inside content dir
                     if CONTENT_DIR in img_path.parents or img_path == CONTENT_DIR:
-                        # create a URL that serves static content from /content-files/<relative path>
                         rel = img_path.relative_to(CONTENT_DIR)
                         image_url = url_for("content_file", path=str(rel))
-                except Exception as e:
-                    print(e)
-            else:
-                image_url = None
+                except Exception:
+                    image_url = None
             files.append({
-                "filename": str(p.relative_to(CONTENT_DIR)),  # relative path used as id
+                "filename": str(p.relative_to(CONTENT_DIR)),
                 "title": title,
                 "metadata": metadata,
                 "image_url": image_url,
             })
-
     return files
 
 @app.route("/")
 def index():
-    files = list_markdown_files()
-    return render_template("index.html", files=files)
+    page = request.args.get("page", 1, type=int)
+    PER_PAGE = 20
+    total = count_markdown_files()
+    last_page = (total + PER_PAGE - 1) // PER_PAGE
+    if page < 1 or page > max(1, last_page):
+        abort(404)
+    offset = (page - 1) * PER_PAGE
+    files = list_markdown_files(offset=offset, limit=PER_PAGE)
+    return render_template("index.html", files=files, page=page, last_page=last_page)
+
+@app.route("/api/files")
+def api_files():
+    page = request.args.get("page", 1, type=int)
+    PER_PAGE = 20
+    total = count_markdown_files()
+    last_page = (total + PER_PAGE - 1) // PER_PAGE
+    if page < 1 or page > max(1, last_page):
+        return jsonify({"ok": False, "error": "page out of range"}), 400
+    offset = (page - 1) * PER_PAGE
+    files = list_markdown_files(offset=offset, limit=PER_PAGE)
+    return jsonify({"ok": True, "page": page, "last_page": last_page, "total": total, "files": files})
 
 @app.route("/content/<path:path>")
 def content_file(path):

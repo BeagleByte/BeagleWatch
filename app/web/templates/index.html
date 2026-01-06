@@ -53,36 +53,28 @@
     <div class="tab-content mt-3">
         <div class="tab-pane fade show active" id="news" data-bs-toggle="tab" role="tabpanel"
              aria-labelledby="home-tab">
-            <div id="list" class="row g-3">
+
+            <ul class="list-unstyled text-start doc-list">
                 {% for f in files %}
-                <div class="col-12 col-sm-6 col-md-4">
-                    <div class="card h-100 shadow-sm">
-                        <h3 class="card-title mb-2"><a href="{{ url_for('view_markdown', md_path=f.filename) }}">{{
-                            f.title }}</a></h3>
-                        {% if f.image_url %}
-                        <img class="card-img-top" alt="thumbnail" src="{{ f.image_url }}" alt="thumbnail">
-                        {% else %}
-                        <img class="card-img-top" src="{{ url_for('static', filename='images/unknown.jpeg') }}"
-                             alt="thumbnail">
-                        {% endif %}
-                        </a>
-                        <div class="card-body">
-                            {% for k, v in f.metadata.items() %}
-                            {% if k =='original_feed' %}
-                            <p class="lead">Original source {{ v }}</p>
-                            {% elif k =='fetched_at' %}
-                            <p class="lead">Fetched {{ v.split('T')[0] }}</p>
-                             {% else %}
-                            {% endif %}
-                            {% endfor %}
-                        </div>
-                        <div class="card-footer">
-                            <button class="btn" data-file="{{ f.filename }}">Run Action</button>
-                        </div>
-                    </div>
-                </div>
+                <li class="neo-frame">
+                            <a href="{{ url_for('view_markdown', md_path=f.filename) }}">{{ f.title }}</a>
+                </li>
                 {% endfor %}
-            </div>
+            </ul>
+
+            <nav class="clearfix">
+                {% if page > 1 %}
+                <a class="btn" href="{{ url_for('index', page=1) }}">« First</a>
+                <a class="btn" href="{{ url_for('index', page=page-1) }}">‹ Prev</a>
+                {% endif %}
+
+                <span>Page {{ page }} / {{ last_page }}</span>
+
+                {% if page < last_page %}
+                <a class="btn" href="{{ url_for('index', page=page+1) }}">Next ›</a>
+                <a class="btn" href="{{ url_for('index', page=last_page) }}">Last »</a>
+                {% endif %}
+            </nav>
         </div>
         <div class="tab-pane fade" id="CVE" data-bs-toggle="tab" role="tabpanel" aria-labelledby="CVE-tab">
             Profile content...
