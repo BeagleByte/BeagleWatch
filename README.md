@@ -1,5 +1,8 @@
 # BeagleWatch
-Beagle is watching security news and CVE's
+Beagle is watching security news 
+
+
+## Work in progress
 
 
 ## The result
