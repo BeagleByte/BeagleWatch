@@ -93,6 +93,19 @@ def content_file(path):
         abort(404)
     return send_from_directory(str(CONTENT_DIR), path)
 
+@app.route("/view_fragment/<path:md_path>")
+def view_fragment(md_path):
+    file_path = (CONTENT_DIR / md_path).resolve()
+    if not file_path.exists() or CONTENT_DIR not in file_path.parents and file_path != CONTENT_DIR:
+        abort(404)
+    post = frontmatter.load(file_path)
+    html = markdown.markdown(post.content, extensions=["fenced_code", "tables", "toc"])
+    # keep existing behavior (strip tags) or use html directly:
+    soup = BeautifulSoup(html, 'html.parser')
+    clean = soup.get_text()
+    return render_template("view_md_fragment.html", html=clean, metadata=post.metadata, title=post.metadata.get("title", file_path.stem))
+
+
 @app.route("/view/<path:md_path>")
 def view_markdown(md_path):
     file_path = (CONTENT_DIR / md_path).resolve()

@@ -69,9 +69,7 @@
                                 {% endfor %}
                             </code>
                             <div class="card-footer">
-                                <a class="btn" href="{{ url_for('view_markdown', md_path=f.filename) }}">View</a>
-                                <a class="edit-modal-opener" data-bs-toggle="modal" data-bs-target="#view"
-                                   data-view="{{ url_for('view_markdown', md_path=f.filename) }}" href="">View</a>
+                                <a href="#" class="md-view-btn btn" data-path="{{ f.filename }}">View</a>
                             </div>
                         </div>
                     </li>
@@ -96,33 +94,30 @@
 
 </div>
 
-<div class="modal" id="view" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Modal title</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <iframe>
-
-                </iframe>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
+<div id="mdModalContainer"></div>
 <script>
-    function openModal() {
-       const view = document.getElementById('view')
-    const myInput = document.getElementById('myInput')
-
-    view.addEventListener('shown.bs.modal', () => {
-      myInput.focus()
-    })
-    }
+    document.addEventListener('click', async (e) => {
+      const btn = e.target.closest('.md-view-btn');
+      if (!btn) return;
+      e.preventDefault();
+      const path = btn.dataset.path;
+      try {
+        const res = await fetch('/view_fragment/' + encodeURIComponent(path));
+        if (!res.ok) {
+          alert('Failed to load preview');
+          return;
+        }
+        const html = await res.text();
+        const container = document.getElementById('mdModalContainer');
+        container.innerHTML = html;
+        const modalEl = document.getElementById('mdModal');
+        const modal = new bootstrap.Modal(modalEl);
+        modal.show();
+      } catch (err) {
+        console.error(err);
+        alert('Error loading preview');
+      }
+    });
 </script>
 <script>
     document.addEventListener("click", function(e){

@@ -14,22 +14,7 @@
 <div class="container mt-3">
     <div class="card h-100 shadow-sm">
         <article class="article">
-            {% if metadata %}
-            <div class="">
-                {% for k, v in metadata.items() %}
-                {% if k == 'title' %}
-                <h2>{{ v }}</h2>
-                {% elif k == 'source_url' %}
-                <p><strong>Source</strong> <a href="{{ v }}" target="_blank" rel="noopener noreferrer">{{ v }}</a>
-                </p>
-                {% elif k == 'fetched_at' %}
-                <p><strong>Fetched</strong> {{ v.split('T')[0] }}</p>
-                {% else %}
 
-                {% endif %}
-                {% endfor %}
-            </div>
-            {% endif %}
             <div class="article-content">
                 {{ html|safe }}
             </div>

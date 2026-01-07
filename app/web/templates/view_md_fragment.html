@@ -1,0 +1,32 @@
+<div class="modal fade" id="mdModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">{{ title }}</h3>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                {% if metadata %}
+                <div class="">
+                    {% for k, v in metadata.items() %}
+                    {% if k == 'source_url' %}
+                    <p><strong>Source</strong> <a href="{{ v }}" target="_blank" rel="noopener noreferrer">{{ v }}</a>
+                    </p>
+                    {% elif k == 'fetched_at' %}
+                    <p><strong>Fetched</strong> {{ v.split('T')[0] }}</p>
+                    {% else %}
+
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                {% endif %}
+                <article class="article">
+                    <div class="article-content">{{ html|safe }}</div>
+                </article>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
