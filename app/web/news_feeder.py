@@ -41,7 +41,7 @@ def list_markdown_files(offset=0, limit=None):
             image = metadata.get("image")
             if not image and post:
                 import re
-                m = re.search(r'![[^]]*](([^)]+))', post.content)
+                m = re.search(r'![[^]]*]', post.content)
                 if m:
                     image = m.group(1)
             image_url = None

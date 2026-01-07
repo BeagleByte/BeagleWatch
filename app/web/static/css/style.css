@@ -10,9 +10,27 @@
 .tab-content>.tab-pane {
     color: #d2c094;
 }
-.nav-tabs {
-border:none;
+.navbar-expand-lg .navbar-collapse {
+      --aug-border-bg: orange;
+  --aug-border-all: 2px ;
+        background:
+        repeating-linear-gradient(90deg, #e48b31, #e48b31 2px, transparent 2px, transparent 4px),
+        linear-gradient(90deg, #e48b31, #b77536, #e48b31);
+    background-size: 400% 400%, 100% 100%;
+    animation: glitch 0.5s infinite;
+    color: #ffffff !important;
+    border: 1px solid #b77536;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    transform: translateY(-3px);
+    border-radius: 0;
 }
+.nav-tabs {
+    border:none;
+}
+.nav-item:not(:last-child) {
+    padding-left: 64px;
+}
+
 .navbar-brand {
    white-space: nowrap;
     overflow: hidden;
@@ -61,15 +79,7 @@ border:none;
     border:none;
 }
 
-.card {
-    background-color: #2e2620;
-    color: #e4b151;
-    text-align:left;
-    border: 1px solid #de9a32;
-    padding: 3px 5px 3px 5px;
-    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.4), 3px 3px 8px #de9a32;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
+
 .navbar .navbar-expand-lg {
     background-color: #2e2620;
     transition: all 0.3s ease;
@@ -92,9 +102,7 @@ border:none;
 .article {
 color: white;
 }
-.article-content {
 
-}
 
 
 @keyframes glitch {
@@ -126,13 +134,39 @@ color: white;
 }
 
 .card {
-    background-color: #2e2620;
+    background-color: #2e2620 opacity: 0.5;
     color: #e4b151;
     border: 1px solid #de9a32;
-    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.4), 3px 3px 8px #de9a32;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position:relative;
+    max-width:360px;
+    min-height:320px;
+    margin: 10px 10px;
+    padding: 5px 5px 5px 5px;
+    background-color: rgba(255,255,255,0.06);
+    backdrop-filter: blur(10px);
+}
+.card-header {
+ border: none;
+    background-color: transparent;
+    color: #e4b151;
+    font-size: 1.25rem;
+    font-weight: bold;
 }
 
+.card-footer {
+    border: none;
+    text-align: right;
+}
+.card-title {
+    color: white;
+}
+.card-text {
+    padding: 10px 15px;
+}
+.card-text .lead {
+    color: #e4b151;
+    font-size: 1rem;
+}
 .toggle-btn {
     position: absolute;
     right: -15px;
@@ -183,10 +217,10 @@ color: white;
     margin-bottom: 5px;
 }
 .glowing-text {
-    font-size: 0.9rem;
+    font-size: 1.5rem;
     color: #e4b151;
     text-shadow: 0 0 5px #e4b151, 0 0 10px #de9a32, 0 0 15px #e48b31;
-    font-family: 'Orbitron', 'Share Tech Mono', sans-serif;
+    font-family: font-family: Courier, monospace;
     animation: glow 1.5s infinite alternate;
 }
 @keyframes glow {
@@ -210,8 +244,8 @@ color: white;
 }
 .btn:hover {
     background:
-        repeating-linear-gradient(90deg, #e48b31, #e48b31 2px, transparent 2px, transparent 4px),
-        linear-gradient(90deg, #e48b31, #b77536, #e48b31);
+    repeating-linear-gradient(90deg, #e48b31, #e48b31 2px, transparent 2px, transparent 4px),
+    linear-gradient(90deg, #e48b31, #b77536, #e48b31);
     background-size: 400% 400%, 100% 100%;
     animation: glitch 0.5s infinite;
     color: #ffffff !important;
@@ -282,44 +316,13 @@ a {
 .single-side {
 color: #d2c094;
 }
-
-.services-section {
-    text-align: center;
-    padding: 50px 20px;
-    color: #e4b151;
+.nav-item .btn{
+    background-color: transparent;
+    color: white;
+    font-style: initial;
+    font-size: x-large;
+    border: none;
 }
-
-.section-title {
-    font-size: 2rem;
-    margin-bottom: 30px;
-}
-
-.services-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 20px;
-}
-.services-section h1, h2, h3, h4, h5, h6 {
-    color:white;
-    text-shadow:none;
-}
-
-.service-card {
-    background: #c0883d;
-    border: 1px solid #e4b151;
-    border-radius: 10px;
-    padding: 20px;
-    width: 300px;
-    text-align: center;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.service-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
-}
-
 .service-icon {
     font-size: 3rem;
     margin-bottom: 15px;
@@ -349,56 +352,6 @@ color: #d2c094;
 
 ul.doc-list > li { float: left; /* or right */ }
 ul.doc-list::after { content:""; display:block; clear:both; }
-/*
-experimental neon frame effect for content containers
-*/
-.neo-frame{
-  position:relative;
-  max-width:300px;
-  margin:24px auto;
-  padding:10px;
-  border-radius:5px;
-  background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-  overflow:hidden;
-  box-shadow: 0 6px 30px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.02);
-}
-
-/* glowing multi-line border using pseudo-elements */
-.neo-frame::before,
-.neo-frame::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  border-radius:inherit;
-  pointer-events:none;
-}
-
-/* primary neon stroke (soft glow) */
-.neo-frame::before{
-  margin:6px; /* inner gap for dual-line look */
-  padding:2px; /* thickness of the glowing line */
-  box-shadow:
-    0 0 18px rgba(128,0,255,0.28),
-    0 0 38px rgba(0,200,255,0.22),
-    0 6px 30px rgba(0,0,0,0.6) inset;
-  filter: blur(6px);
-}
-
-/* sharp inner neon edge (contrasting color) */
-.neo-frame{
-  margin:10px;
-  border:2px solid #de9a32;
-  mix-blend-mode: screen;
-}
-
-@keyframes sweep{
-  0%{ transform:translateX(-100%) rotate(0); opacity:0.0; }
-  20%{ opacity:0.25; }
-  50%{ transform:translateX(0%) rotate(0); opacity:0.5; }
-  80%{ opacity:0.25; }
-  100%{ transform:translateX(100%) rotate(0); opacity:0; }
-}
-
 
 
 

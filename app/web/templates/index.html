@@ -7,14 +7,17 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/augmented-ui.min.css') }}">
     <!-- Responsive meta tag -->
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 </head>
 <body>
 <div class="container text-center">
-    <nav class="navbar navbar-expand-lg">
+    <nav class="navbar navbar-expand-lg" >
         <div class="container-fluid">
-            <a class="navbar-brand logo-text" href="#"><img class="sidebar-image" src="{{ url_for('static', filename='images/beagle-logo.jpeg') }}"/> BeagleWatch</a>
+            <a class="navbar-brand logo-text glowing-text " href="/"><img class="sidebar-image"
+                                                                          src="{{ url_for('static', filename='images/beagle-logo.jpeg') }}"/>
+                BeagleWatch</a>
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarTabs" aria-controls="navbarTabs" aria-expanded="false"
@@ -22,31 +25,59 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <div class="collapse navbar-collapse" id="navbarTabs">
+            <div  id="navbarTabs" data-augmented-ui="bl-2-clip-x br-clip b-rect border" class="collapse navbar-collapse">
                 <!-- Tabs as nav inside navbar -->
                 <ul class="nav nav-tabs me-auto" role="tablist">
                     <li class="nav-item">
-                        <button class="nav-link active" id="news-tab" data-bs-toggle="tab"
+                        <button class="btn" id="news-tab" data-bs-toggle="tab"
                                 data-bs-target="#news" type="button" role="tab" aria-controls="news"
                                 aria-selected="true">
                             News
+                        </button>
+                    </li>
+                        <li class="nav-item">
+                        <button class="btn" id="search-tab" data-bs-toggle="tab"
+                                data-bs-target="#news" type="button" role="tab" aria-controls="news"
+                                aria-selected="true">
+                            Search
                         </button>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
-    <div class="tab-content mt-3">
+    <div class="tab-content mt-3 container">
         <div class="tab-pane fade show active" id="news" data-bs-toggle="tab" role="tabpanel"
              aria-labelledby="home-tab">
-
-            <ul class="list-unstyled text-start doc-list">
-                {% for f in files %}
-                <li class="neo-frame">
-                            <a href="{{ url_for('view_markdown', md_path=f.filename) }}">{{ f.title }}</a>
-                </li>
-                {% endfor %}
-            </ul>
+            <div class="container">
+                <ul class="list-unstyled text-start doc-list">
+                    {% for f in files %}
+                    <li>
+                        <div data-augmented-ui="bl-2-clip-x border" class="card">
+                            <div  class="card-header ">
+                                <code  class="card-title">{{ f.title }} </code>
+                            </div>
+                            <code class="card-text">
+                                {% for k, v in f.metadata.items() %}
+                                {% if k =='original_feed' %}
+                            Source -> {{ v }} <br>
+                            {% elif k =='fetched_at' %}
+                                Fetched -> {{ v.split('T')[0] }}<br>
+                                  {% elif k =='date' %}
+                                Date -> {{ v.split('T')[0] }}<br>
+                            {% else %}
+                            {% endif %}
+                            {% endfor %}
+                            </code>
+                            <div class="card-footer">
+                                <a class="btn" href="{{ url_for('view_markdown', md_path=f.filename) }}">View</a>
+                                <a class="edit-modal-opener" data-bs-toggle="modal" data-bs-target="#view"  data-view="{{ url_for('view_markdown', md_path=f.filename) }}" href="">View</a>
+                            </div>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
 
             <nav class="clearfix">
                 {% if page > 1 %}
@@ -68,6 +99,34 @@
 
 </div>
 
+<div class="modal" id="view" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Modal title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <iframe>
+
+        </iframe>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+function openModal() {
+   const view = document.getElementById('view')
+const myInput = document.getElementById('myInput')
+
+view.addEventListener('shown.bs.modal', () => {
+  myInput.focus()
+})
+}
+</script>
 <script>
     document.addEventListener("click", function(e){
       if(e.target.matches(".action-btn")){

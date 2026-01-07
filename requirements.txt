@@ -1,0 +1,9 @@
+beautifulsoup4>=4.14.3
+bleach>=6.3.0
+discord-py>=2.6.4
+feedparser>=6.0.12
+flask>=3.1.2
+markdown>=3.10
+python-frontmatter>=1.1.0
+python-slugify>=8.0.4
+requests>=2.32.5
