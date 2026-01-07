@@ -30,7 +30,12 @@
 .nav-item:not(:last-child) {
     padding-left: 64px;
 }
-
+#app-name {
+     color: white;
+     font-size: 1.5rem;
+     margin-right:20px;
+     margin-top:10px;
+}
 .navbar-brand {
    white-space: nowrap;
     overflow: hidden;
@@ -146,7 +151,7 @@ color: white;
     backdrop-filter: blur(10px);
 }
 .card-header {
- border: none;
+    border: none;
     background-color: transparent;
     color: #e4b151;
     font-size: 1.25rem;
@@ -180,6 +185,9 @@ color: white;
     z-index: 100;
     cursor: pointer;
     transition: transform 0.3s ease;
+}
+.text-start {
+    padding-left:100px;
 }
 
 .collapsed .toggle-btn {
@@ -220,7 +228,7 @@ color: white;
     font-size: 1.5rem;
     color: #e4b151;
     text-shadow: 0 0 5px #e4b151, 0 0 10px #de9a32, 0 0 15px #e48b31;
-    font-family: font-family: Courier, monospace;
+    font-family: 'Orbitron', 'Share Tech Mono', sans-serif;
     animation: glow 1.5s infinite alternate;
 }
 @keyframes glow {
