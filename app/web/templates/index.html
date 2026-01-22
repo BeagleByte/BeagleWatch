@@ -96,28 +96,28 @@
 
 <div id="mdModalContainer"></div>
 <script>
-    document.addEventListener('click', async (e) => {
-      const btn = e.target.closest('.md-view-btn');
-      if (!btn) return;
-      e.preventDefault();
-      const path = btn.dataset.path;
-      try {
-        const res = await fetch('/view_fragment/' + encodeURIComponent(path));
-        if (!res.ok) {
-          alert('Failed to load preview');
-          return;
-        }
-        const html = await res.text();
-        const container = document.getElementById('mdModalContainer');
-        container.innerHTML = html;
-        const modalEl = document.getElementById('mdModal');
-        const modal = new bootstrap.Modal(modalEl);
-        modal.show();
-      } catch (err) {
-        console.error(err);
-        alert('Error loading preview');
-      }
-    });
+document.addEventListener('click', async (e) => {
+  const btn = e.target.closest('.md-view-btn');
+  if (!btn) return;
+  e.preventDefault();
+  const path = btn.dataset.path;
+  try {
+    const res = await fetch('/view_fragment/' + encodeURIComponent(path));
+    if (!res.ok) {
+      alert('Failed to load preview');
+      return;
+    }
+    const html = await res.text();
+    const container = document.getElementById('mdModalContainer');
+    container.innerHTML = html;
+    const modalEl = document.getElementById('mdModal');
+    const modal = new bootstrap.Modal(modalEl);
+    modal.show();
+  } catch (err) {
+    console.error(err);
+    alert('Error loading preview');
+  }
+});
 </script>
 <script>
     document.addEventListener("click", function(e){

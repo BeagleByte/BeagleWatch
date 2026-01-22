@@ -106,18 +106,6 @@ def view_fragment(md_path):
     return render_template("view_md_fragment.html", html=clean, metadata=post.metadata, title=post.metadata.get("title", file_path.stem))
 
 
-@app.route("/view/<path:md_path>")
-def view_markdown(md_path):
-    file_path = (CONTENT_DIR / md_path).resolve()
-    print(file_path)
-    if not file_path.exists() or CONTENT_DIR not in file_path.parents and file_path != CONTENT_DIR:
-        abort(404)
-    post = frontmatter.load(file_path)
-    html = markdown.markdown(post.content, extensions=["fenced_code", "tables", "toc"])
-
-    soup = BeautifulSoup(html, 'html.parser')
-    clean = soup.get_text()
-    return render_template("view_md.html", html=clean, metadata=post.metadata, title=post.metadata.get("title", file_path.stem))
 
 # Example background action: run a function in a thread
 def background_action(file_rel_path):

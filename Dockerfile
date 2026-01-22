@@ -1,20 +1,23 @@
-FROM python:3.14-slim
+FROM python:3.11-slim
 
 WORKDIR /app
 
-# Install system dependencies if needed
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    && rm -rf /var/lib/apt/lists/*
-
-# Copy requirements
+# Install dependencies
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application code
+# Copy entire application
 COPY . .
 
 # Create necessary directories
-RUN mkdir -p db content/assets
+RUN mkdir -p content/assets db
 
-# Run the application
-CMD ["python3", "app/CyberSecFeeds.py"]
+# Expose Flask port
+EXPOSE 5000
+
+# Copy startup script
+COPY start.sh /start.sh
+RUN chmod +x /start.sh
+
+# Run both services
+CMD ["/start.sh"]

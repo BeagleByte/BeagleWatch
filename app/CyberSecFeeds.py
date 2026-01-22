@@ -1,10 +1,5 @@
 #!/usr/bin/env python3
 """
-rss_to_md_oop_safe.py
-OOP RSS -> Markdown with idempotent, concurrency-safe insertion.
-
-Requirements:
-    pip install feedparser requests python-slugify
 
 Features:
 - Multiple feeds
@@ -28,7 +23,6 @@ from services.AssetManager import AssetManager
 from services.FeedFetcher import FeedFetcher
 from services.MarkdownStore import MarkdownStore
 import logging
-import threading
 import time
 import schedule
 
@@ -71,11 +65,14 @@ def safe_slug(s: str) -> str:
     s = slugify(s or "post")
     return re.sub(r'[^a-z0-9\-]+', '', s)[:200] or "post"
 
-# your job
+
 def job():
-    print("job start", time.time())
-    print("scheduled job running")
-    # call whatever method you need, e.g. app.do_something()
+    print("Scheduled job running at", time.time())
+    try:
+        app.run()  # Process all feeds
+    except Exception as e:
+        print("Job error:", e)
+        traceback.print_exc()
 
 def run_scheduler():
     while True:
@@ -178,40 +175,27 @@ class RssToMdApp:
                 traceback.print_exc()
 
 if __name__ == "__main__":
-    # schedule jobs
-    schedule.every(1).minutes.do(job)
-
-    # start scheduler thread
-    t = threading.Thread(target=run_scheduler, daemon=True)
-    t.start()
-
-    # start main app
     app = RssToMdApp(FEEDS if len(sys.argv) == 1 else sys.argv[1:])
-    try:
-        print("run")
-        app.run()
-    except KeyboardInterrupt:
-        pass
 
-    # app = RssToMdApp(FEEDS)
-    #
-    #
-    # def job():
-    #     for f in app.feeds:
-    #         threading.Thread(target=app.process_feed, args=(f,), daemon=True).start()
-    #
-    #
-    # schedule.every(16).minutes.do(job)
-    #
-    # t = threading.Thread(target=run_scheduler, daemon=True)
-    # t.start()
-    #
-    # # Optionally run job once at startup:
-    # job()
-    #
-    # # Keep main alive (or handle signals)
-    # try:
-    #     while True:
-    #         time.sleep(1)
-    # except KeyboardInterrupt:
-    #     pass
+    def job():
+        print(f"Processing feeds at {time.strftime('%Y-%m-%d %H:%M:%S')}")
+        try:
+            app.run()
+        except Exception as e:
+            print("Error during feed processing:", e)
+            traceback.print_exc()
+
+    # Schedule the job
+    schedule.every(60).minutes.do(job)
+
+    # Run once immediately at startup
+    job()
+
+    # Main loop - no threading needed!
+    print("Scheduler running. Press Ctrl+C to exit.")
+    try:
+        while True:
+            schedule.run_pending()
+            time.sleep(1)  # Check every second
+    except KeyboardInterrupt:
+        logging.error("\nShutting down...")
