@@ -9,9 +9,10 @@ from urllib.parse import urlparse
 
 import requests
 
-OUTPUT_DIR = Path("content")
+BASE_DIR = Path(__file__).resolve().parent.parent / "app"
+OUTPUT_DIR = BASE_DIR / "content"
 ASSETS_DIR = OUTPUT_DIR / "assets"
-DB_PATH = Path("db/posts.db")
+DB_PATH = BASE_DIR / "db" / "posts.db"
 USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36"
 REQUEST_TIMEOUT = 30
 now = datetime.now(timezone.utc)

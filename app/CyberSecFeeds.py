@@ -18,6 +18,9 @@ import traceback
 from pathlib import Path
 from typing import List
 from urllib.parse import urlparse
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
 from slugify import slugify
 from services.AssetManager import AssetManager
 from services.FeedFetcher import FeedFetcher
@@ -33,9 +36,10 @@ FEEDS = [
     "https://cvefeed.io/rssfeed/latest.xml",
     "https://cvefeed.io/rssfeed/newsroom.xml"
 ]
-OUTPUT_DIR = Path("content")
+BASE_DIR = Path(__file__).resolve().parent
+OUTPUT_DIR = BASE_DIR / "content"
 ASSETS_DIR = OUTPUT_DIR / "assets"
-DB_PATH = Path("db/posts.db")
+DB_PATH = BASE_DIR / "db" / "posts.db"
 
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 ASSETS_DIR.mkdir(parents=True, exist_ok=True)
@@ -86,8 +90,8 @@ class RssToMdApp:
     def __init__(self, feeds: List[str]):
         self.feeds = feeds
         self.fetcher = FeedFetcher()
-        self.asset_mgr = AssetManager()
-        self.store = MarkdownStore()
+        self.asset_mgr = AssetManager(base_dir=ASSETS_DIR)
+        self.store = MarkdownStore(output_dir=OUTPUT_DIR, db_conn=_conn)
 
     def feed_slug(self, feed_title: str) -> str:
         return safe_slug(feed_title or "feed")
