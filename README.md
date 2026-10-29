@@ -7,7 +7,7 @@ Makes life easier for security researchers and professionals by collecting relev
 ## Latest changes
 -> fix some bugs which appear if it runs dedicated...
 
-
+## Installation
 Tested on Linux, with docker compose included.
 
 I put the flask app to port 5001 on the host machine.
