@@ -29,6 +29,7 @@ now = datetime.now(timezone.utc)
 
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 ASSETS_DIR.mkdir(parents=True, exist_ok=True)
+DB_PATH.parent.mkdir(parents=True, exist_ok=True)
 
 # SQLite setup (enable WAL for concurrency)
 _conn = sqlite3.connect(DB_PATH, timeout=30, isolation_level=None)  # autocommit off; we'll use explicit transactions

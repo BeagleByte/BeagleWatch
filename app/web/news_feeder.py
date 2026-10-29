@@ -12,6 +12,7 @@ print(BASE_DIR)
 
 #relative path to content
 CONTENT_DIR = (BASE_DIR / "../content").resolve()
+CONTENT_DIR.mkdir(parents=True, exist_ok=True)
 
 app = Flask(__name__)
 app.secret_key = "change-me-to-a-secure-key"  # replace in production
@@ -23,7 +24,7 @@ def count_markdown_files():
 
 def list_markdown_files(offset=0, limit=None):
     files = []
-    files_in_content = [p for p in CONTENT_DIR.glob("**/*") if p.is_file()]
+    files_in_content = [p for p in CONTENT_DIR.glob("**/*") if p.is_file() and p.suffix.lower() in ALLOWED_EXT]
     files_sorted = sorted(files_in_content, key=lambda p: p.stat().st_mtime, reverse=True)
     if limit is not None:
         files_sorted = files_sorted[offset: offset + limit]
